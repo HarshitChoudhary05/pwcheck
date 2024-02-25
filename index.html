@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Batch Requests</title>
+    <style>
+        /* CSS for divs */
+        .batch-div {
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: calc(33.33% - 20px); /* Adjust width for responsiveness */
+            box-sizing: border-box; /* Include padding and border in width calculation */
+            float: left; /* Float the divs for horizontal arrangement */
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .batch-div:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        /* CSS for images */
+        .batch-img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* CSS for titles */
+        .batch-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        /* Clearfix for float */
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Responsive styles */
+        @media only screen and (max-width: 768px) {
+            .batch-div {
+                width: calc(50% - 18px); /* Adjust width for responsiveness */
+            }
+        }
+
+        @media only screen and (max-width: 480px) {
+            .batch-div {
+                width: 90%; /* Adjust width for responsiveness */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container" class="clearfix"></div>
+
+    <script>
+        // Function to send API request
+        fetch('https://pwtestapi.vercel.app/pwbatch.json')
+        .then(response => response.json())
+        .then(data => {
+            // Process data for each item in the batch
+            for (const batch in data.batches) {
+                createDiv(data.batches[batch]);
+            }
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+        // Function to create div elements
+        function createDiv(batch) {
+            const container = document.getElementById('container');
+            const div = document.createElement('div');
+            const img = document.createElement('img');
+            const title = document.createElement('div');
+
+            // Apply class to div
+            div.classList.add('batch-div');
+
+            // Set image source and alt text
+            img.src = batch.img;
+            img.alt = batch.name;
+            img.classList.add('batch-img');
+
+            // Set div title and add click event listener
+            title.textContent = batch.name;
+            title.classList.add('batch-title');
+
+            div.addEventListener('click', function() {
+                window.open(batch.slug, '_blank');
+            });
+
+            // Append image and title to div
+            div.appendChild(img);
+            div.appendChild(title);
+            container.appendChild(div);
+        }
+    </script>
+</body>
+</html>
