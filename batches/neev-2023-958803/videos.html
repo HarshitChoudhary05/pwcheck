@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        #container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+           
+        }
+
+        #subjects, #topics, #details {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .video-div {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .video-div img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .video-div h3 {
+            margin-top: 10px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .video-div a {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .video-div a:hover {
+            background-color: #45a049;
+        }
+
+        #backBtn {
+            display: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+        }
+
+        #backBtn:hover {
+            background-color: #555;
+        }
+
+        @media screen and (max-width: 600px) {
+            .btn {
+                width: 100%;
+            }
+
+            #backBtn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <button id="backBtn">Back</button>
+    <div id="subjects"></div>
+    <div id="topics"></div>
+    <div id="details"></div>
+   
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var currentView = "subjects"; // Initial view
+
+        // Make API request to get data
+        $.get("https://pwtestapi.vercel.app/arjuna-jee-2023/arjuna-jee-1.0/videos.json", function (data) {
+            // Create buttons for each subject
+            data.subjects.forEach(function (subject) {
+                $("#subjects").append(`<button class="btn subject-btn">${subject.subject_name}</button>`);
+            });
+
+            // Event listener for subject buttons
+            $(".subject-btn").click(function () {
+                // Hide all subject buttons
+                $(".subject-btn").hide();
+
+                // Get the selected subject name
+                var subjectName = $(this).text();
+
+                // Find topics for the selected subject
+                var topics = data.subjects.find(s => s.subject_name === subjectName).topics;
+
+                // Create buttons for each topic
+                topics.forEach(function (topic) {
+                    $("#topics").append(`<button class="btn topic-btn">${topic.topic_name}</button>`);
+                });
+
+                // Show back button
+                $("#backBtn").show();
+
+                currentView = "topics"; // Update current view
+
+                // Event listener for topic buttons
+                $(".topic-btn").click(function () {
+                    // Hide all topic buttons
+                    $(".topic-btn").hide();
+
+                    // Get the selected topic name
+                    var topicName = $(this).text();
+
+                    // Find details for the selected topic
+                    var details = data.subjects.find(s => s.subject_name === subjectName)
+                        .topics.find(t => t.topic_name === topicName).details;
+
+                    // Create a div for each detail
+                    details.forEach(function (detail) {
+                        $("#details").append(`<div class="video-div">
+                                                <img src="${detail.image_url}" alt="${detail.video_title}">
+                                                <h3>${detail.video_title}</h3>
+                                                <a href="${detail.video_url} target="_blank">Watch Video</a>
+                                             </div>`);
+                    });
+
+                    // Show back button
+                    $("#backBtn").show();
+
+                    currentView = "details"; // Update current view
+                });
+            });
+        });
+
+        // Back button functionality
+        $("#backBtn").click(function () {
+            if (currentView === "topics") {
+                // Show subject buttons
+                $(".subject-btn").show();
+                // Clear topics
+                $("#topics").empty();
+                // Hide back button
+                $("#backBtn").hide();
+
+                currentView = "subjects"; // Update current view
+            } else if (currentView === "details") {
+                // Show topic buttons
+                $(".topic-btn").show();
+                // Clear details
+                $("#details").empty();
+
+                currentView = "topics"; // Update current view
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
