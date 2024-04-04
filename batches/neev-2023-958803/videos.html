@@ -120,7 +120,7 @@
         var currentView = "subjects"; // Initial view
 
         // Make API request to get data
-        $.get("https://pwtestapi.vercel.app/arjuna-jee-2023/arjuna-jee-1.0/videos.json", function (data) {
+        $.get("https://pwtestapi.vercel.app/neev-2023-958803/videos.json", function (data) {
             // Create buttons for each subject
             data.subjects.forEach(function (subject) {
                 $("#subjects").append(`<button class="btn subject-btn">${subject.subject_name}</button>`);
