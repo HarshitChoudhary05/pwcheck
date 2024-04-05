@@ -16,7 +16,6 @@
             max-width: 1200px;
             margin: 20px auto;
             padding: 20px;
-           
         }
 
         #subjects, #topics, #details {
@@ -61,7 +60,7 @@
             color: #333;
         }
 
-        .video-div a {
+        .video-div .copy-url {
             display: inline-block;
             background-color: #4CAF50;
             color: white;
@@ -69,9 +68,10 @@
             text-decoration: none;
             border-radius: 5px;
             transition: background-color 0.3s;
+            cursor: pointer;
         }
 
-        .video-div a:hover {
+        .video-div .copy-url:hover {
             background-color: #45a049;
         }
 
@@ -111,7 +111,6 @@
     <div id="subjects"></div>
     <div id="topics"></div>
     <div id="details"></div>
-   
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -164,7 +163,7 @@
                         $("#details").append(`<div class="video-div">
                                                 <img src="${detail.image_url}" alt="${detail.video_title}">
                                                 <h3>${detail.video_title}</h3>
-                                                <a href="${detail.video_url} target="_blank">Watch Video</a>
+                                                <button class="copy-url" onclick="copyUrl('${detail.video_url}')">Copy URL</button>
                                              </div>`);
                     });
 
@@ -197,6 +196,17 @@
             }
         });
     });
+
+    // Function to copy URL to clipboard
+    function copyUrl(url) {
+        var tempInput = document.createElement("input");
+        tempInput.value = url;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        alert("URL copied to clipboard: " + url);
+    }
 </script>
 
 </body>
