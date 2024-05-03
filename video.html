@@ -1,0 +1,300 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <link rel="stylesheet" href="https://cdn.plyr.io/3.6.12/plyr.css" />
+            <!-- Favicon -->
+        <link href="favicon.ico" rel="icon">
+        <script type="text/javascript" src="https://cdn.plyr.io/3.6.12/plyr.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Poppins|Quattrocento+Sans" rel="stylesheet"/>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dashjs/3.1.3/dash.all.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/hls.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <title>Pw Player</title>
+	<!-- Help use= to earn from your site!, if you dont want then just remove the below line -->
+        <style type="text/css" media="screen">
+        html {
+    font-family: 'Poppins', sans-serif;
+    background: #0A0909;
+    margin: 0;
+    padding: 0;
+    --plyr-color-main: #5a4bda; /* Changed player main color to a blue shade */
+}
+
+.logo-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 60px;
+    height: 60px;
+}
+
+.plyr {
+    height: 100%;
+    width: 100%;
+    color: #fff; /* Changed player text color to white */
+}
+
+#logo {
+    position: fixed;
+    background-image: url("https://i.imgur.com/Z52wJgg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.float {
+    height: 60px;
+    width: 60px;
+    z-index: 10;
+    border-radius: 50%;
+    box-shadow: 2px 2px 3px #999;
+}
+
+.label-container {
+    position: relative;
+    top: 5px;
+    left: 70px;
+    display: table;
+    visibility: hidden;
+}
+
+.label-text {
+    color: #FFF;
+    background: rgba(51, 51, 51, 0.8);
+    display: table-cell;
+    vertical-align: middle;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.label-arrow {
+    display: table-cell;
+    vertical-align: middle;
+    color: #333;
+    opacity: 0.7;
+    transform: scaleX(-1);
+}
+
+a.float + div.label-container {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s ease;
+}
+
+a.float:hover + div.label-container {
+    visibility: visible;
+    opacity: 1;
+}
+
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loader {
+  --hue: 210;
+  --size: 100px;
+  --border: 10px;
+  --speed: 1s;
+  --blur: var(--border);
+}
+
+.loader {
+  width: var(--border);
+  aspect-ratio: 1;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  --y: calc((var(--size) * -0.5) + (var(--border) * 0.5));
+  transform: rotate(0deg) translateY(var(--y));
+  animation: spin var(--speed) infinite linear;
+}
+
+.loader::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--border) * -0.5);
+  border-radius: 50%;
+  background: white;
+  filter: blur(var(--blur));
+  z-index: -1;
+}
+
+.loader::after {
+  content: "";
+  width: var(--size);
+  aspect-ratio: 1;
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  translate: -50% 0;
+  background: conic-gradient(
+    white,
+    hsl(var(--hue), 100%, 70%),
+    hsl(var(--hue), 100%, 10%),
+    transparent 65%
+  );
+  border-radius: 50%;
+  mask: radial-gradient(
+    transparent calc(((var(--size) * 0.5) - var(--border)) - 1px),
+    white calc((var(--size) * 0.5) - var(--border))
+  );
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(-360deg) translateY(var(--y));
+  }
+}
+
+
+
+        </style>
+    </head>
+    <body>
+        
+          <div id="loading" class="loading">
+        <div aria-live="assertive" role="alert" class="loader"></div>
+
+       </div>
+        
+
+
+        <video controls crossorigin playsinline id="videoContainer" style="background-color: #0A0909;">
+            <source src="https://d1d34p8vz63oiq.cloudfront.net/db09b532-8809-4826-9041-44db0552a89f/master.mpd">
+        </video>
+        
+        
+        <script>
+         const video = document.getElementById("videoContainer");
+    document.addEventListener("DOMContentLoaded", function() {
+        const source = "https://d1d34p8vz63oiq.cloudfront.net/db09b532-8809-4826-9041-44db0552a89f/master.mpd";
+        const dash = dashjs.MediaPlayer().create();
+        var defaultOptions = {
+            controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'rewind', 'fast-forward',
+                'settings', 'fullscreen', 'keyboard'
+            ],
+            
+            autoplay: true,
+
+            "captions": {
+                "active": true,
+                "update": true
+            },
+
+            "speed": {
+                // Default playback speed (1x is normal speed)
+                "options": [0.5, 1, 1.25, 1.5, 1.75, 2, 2.5, 3] // Speed options including 3x
+            }
+        };
+        dash.initialize(video, source, false);
+        dash.updateSettings({
+            streaming: {
+                abr: {
+                    autoSwitchBitrate: {
+                        audio: false,
+                        video: false
+                    }
+                },
+                fastSwitchEnabled: true,
+                lowLatencyEnabled: true
+            }
+        });
+        const protData = {
+            "org.w3.clearkey": {
+                "clearkeys": {
+                    "GUyDz0Ea6cq6LM2ApF6izA": "A_jQbkGNCS3fhNgw0htU1w"
+                }
+            }
+        };
+        dash.setProtectionData(protData);
+        dash.on("streamInitialized", function() {
+            const bodyElement = document.querySelector("body");
+            const loadingElement = document.getElementById("loading");
+            loadingElement.style.display = "none";
+            bodyElement.style.visibility = "visible";
+            const availableQualities = dash.getBitrateInfoListFor("video").map((l) => l.height);
+            defaultOptions.quality = {
+                default: availableQualities[0].height,
+                options: availableQualities,
+                forced: true,
+                onChange: function(newQuality) {
+                    dash.getBitrateInfoListFor("video").forEach((level, levelIndex) => {
+                        if (level.height === newQuality) {
+                            dash.setQualityFor("video", level.qualityIndex);
+                        }
+                    });
+                },
+            };
+            defaultOptions.previewThumbnails = {
+                enabled: true,
+                src: 'https://d1d34p8vz63oiq.cloudfront.net/db09b532-8809-4826-9041-44db0552a89f/master.mpd'
+            };
+            defaultOptions.tooltips = {
+                controls: true,
+                seek: true
+            };
+            const player = new Plyr(video, defaultOptions);
+            window.player = player;
+            window.dash = dash;
+            
+            // Add event listener for play to pause other players
+    player.on('play', () => {
+        // Pause other Plyr players on the page
+        pauseOtherPlayers(player);
+    });
+
+    function pauseOtherPlayers(currentPlayer) {
+        // Get all Plyr players on the page
+        const allPlayers = Plyr.instances;
+
+        // Pause each player that is not the current player
+        allPlayers.forEach(playerInstance => {
+            if (playerInstance !== currentPlayer) {
+                playerInstance.pause();
+            }
+        });
+    }
+        });
+        dash.attachView(video);
+    });
+    
+    
+        document.addEventListener('DOMContentLoaded', () => {
+        // Listen for the full-screen change event
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                // Entered full-screen mode, try to lock the screen orientation
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(error => {
+                        console.error('Error locking screen orientation:', error);
+                    });
+                }
+            } else {
+                // Exited full-screen mode, try to unlock the screen orientation
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock().catch(error => {
+                        console.error('Error unlocking screen orientation:', error);
+                    });
+                }
+            }
+        });
+    });
+    
+    
+        </script>
+  
+<img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fstudyrays.site&count_bg=%2379C83D&title_bg=%23555555&icon=freecodecamp.svg&icon_color=%23E7E7E7&title=HITS&edge_flat=false" style="display: none;">
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"87deda706ac77fc2","r":1,"version":"2024.4.1","token":"72d7bd665aaa4a57b45682913a2c8cc7"}' crossorigin="anonymous"></script>
+</body>
+</html>
