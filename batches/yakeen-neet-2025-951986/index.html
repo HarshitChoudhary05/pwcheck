@@ -1,1 +1,116 @@
-gfg
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Cards</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1200px;
+      padding: 20px;
+    }
+
+    .card {
+      flex: 0 1 calc(33.33% - 20px);
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .card-body {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .card-body a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .card-body a:hover {
+      text-decoration: underline;
+    }
+
+    .icon {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .icon i {
+      font-size: 48px;
+      color: #007bff;
+    }
+
+    @media screen and (max-width: 768px) {
+      .card {
+        flex: 0 1 calc(50% - 20px);
+      }
+    }
+
+    @media screen and (max-width: 576px) {
+      .card {
+        flex: 0 1 calc(100% - 20px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" onclick="window.location.href='videos.html'">
+      <div class="card-header">Videos</div>
+      <div class="card-body">
+        <div class="icon"><i class="fa fa-play-circle"></i></div>
+        Watch Videos
+      </div>
+    </div>
+
+    <div class="card" onclick="window.location.href='classnotes.html'">
+      <div class="card-header">Classnotes</div>
+      <div class="card-body">
+        <div class="icon"><i class="fa fa-book"></i></div>
+        View Classnotes
+      </div>
+    </div>
+
+    <div class="card" onclick="window.location.href='dpp.html'">
+      <div class="card-header">DPP</div>
+      <div class="card-body">
+        <div class="icon"><i class="fa fa-file-alt"></i></div>
+        Daily Practice Problems
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Font Awesome CDN -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>
